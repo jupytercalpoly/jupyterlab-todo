@@ -1,3 +1,6 @@
+// Copyright (c) Jupyter Development Team.
+// Distributed under the terms of the Modified BSD License.
+
 import {
   JupyterFrontEnd,
   JupyterFrontEndPlugin
@@ -11,7 +14,6 @@ const plugin: JupyterFrontEndPlugin<void> = {
   autoStart: true,
   activate: (app: JupyterFrontEnd) => {
     console.log('JupyterLab extension jupyterlab-todo is activated!');
-    Promise.resolve(4);
   }
 };
 
