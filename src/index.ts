@@ -11,6 +11,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
   autoStart: true,
   activate: (app: JupyterFrontEnd) => {
     console.log('JupyterLab extension jupyterlab-todo is activated!');
+    Promise.resolve(4);
   }
 };
 
