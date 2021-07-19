@@ -5,12 +5,10 @@ import {
   JupyterFrontEnd,
   JupyterFrontEndPlugin
 } from '@jupyterlab/application';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
 import { Widget } from '@lumino/widgets';
 import { ReactWidget } from '@jupyterlab/apputils';
 import * as Icons from '@jupyterlab/ui-components';
-import 'react-toastify/dist/ReactToastify.css';
 import { TodoCenter } from './TodoCenter';
 import { ICommandPalette, MainAreaWidget } from '@jupyterlab/apputils';
 

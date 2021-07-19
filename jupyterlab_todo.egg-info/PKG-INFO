@@ -3,8 +3,8 @@ Name: jupyterlab-todo
 Version: 0.1.0
 Summary: To-do lists for JupyterLab
 Home-page: https://github.com/jupytercalpoly/jupyterlab-todo
-Author: Harshit Mittal, Andrii Ieroshnko 
-Author-email: harshitclg@gmail.com
+Author: Andrii Ieroshnko, Harshit Mittal
+Author-email: ieroshenkoa@gmail.com
 License: BSD-3-Clause
 Keywords: Jupyter,JupyterLab,JupyterLab3
 Platform: Linux

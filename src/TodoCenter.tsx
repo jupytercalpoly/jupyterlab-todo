@@ -36,7 +36,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 //TODO: decouple elements of the TODO center, consider using something else than Material UI accordion
-export function TodoCenter() : React.ReactNode {
+export function TodoCenter() : JSX.Element {
   let [taskTextInput, setTaskText] = useState<string>("");
   let [subtaskTextInput, setSubtaskText] = useState<string>("");
   let [tasks, setTasks] = useState<ITask[]>([]);

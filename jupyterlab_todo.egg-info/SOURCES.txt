@@ -16,6 +16,9 @@ jupyterlab_todo.egg-info/dependency_links.txt
 jupyterlab_todo.egg-info/not-zip-safe
 jupyterlab_todo.egg-info/requires.txt
 jupyterlab_todo.egg-info/top_level.txt
+jupyterlab_todo/labextension/build_log.json
+jupyterlab_todo/labextension/package.json
+jupyterlab_todo/labextension/static/style.js
 src/TodoCenter.tsx
 src/index.tsx
 style/base.css
