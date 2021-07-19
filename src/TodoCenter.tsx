@@ -76,18 +76,15 @@ export function TodoCenter() : JSX.Element {
     e.currentTarget.reset();
   };
 
-  //TODO: abstract changing value on the object into separate function
   let toggleTask = (e: React.FormEvent<HTMLInputElement>) => {
     let curTasks = [...tasks];
     let i = curTasks.findIndex(task => task.id === parseInt(e.currentTarget.id));
     curTasks[i].done = !curTasks[i].done;
     if (curTasks[i].done) {
-      let t = curTasks.splice(i, 1);
-      t[0].subtasks.map(function(subtask: any) {
+      curTasks[i].subtasks.map(function(subtask) {
         subtask.done = true;
         return subtask;
       })
-      curTasks.push(t[0]);
     }
     setTasks(curTasks);
   }
@@ -98,10 +95,6 @@ export function TodoCenter() : JSX.Element {
     let curSubtasks = [...curTasks[i].subtasks];
     let j = curSubtasks.findIndex(subtask => subtask.id === parseInt(e.currentTarget.id.split('-')[1])); //id
     curSubtasks[j].done = !curSubtasks[j].done;
-    if (curSubtasks[j].done) {
-      let t = curSubtasks.splice(j , 1);
-      curSubtasks.push(t[0]);
-    }
     curTasks[i].subtasks = curSubtasks;
     setTasks(curTasks);
   };
