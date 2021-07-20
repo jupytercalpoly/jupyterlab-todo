@@ -1,3 +1,6 @@
+// Copyright (c) Jupyter Development Team.
+// Distributed under the terms of the Modified BSD License.
+
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Accordion from '@material-ui/core/Accordion'
@@ -36,6 +39,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 //TODO: decouple elements of the TODO center, consider using something else than Material UI accordion
+//TODO: consider not using Material UI
 export function TodoCenter() : JSX.Element {
   let [taskTextInput, setTaskText] = useState<string>("");
   let [subtaskTextInput, setSubtaskText] = useState<string>("");
@@ -102,7 +106,7 @@ export function TodoCenter() : JSX.Element {
   return (
     <div>
       <div>
-        {tasks.map((task: any) => ( 
+        {tasks.map((task: ITask) => ( 
           <div className={classes.root} key={task.id}>
             {/* bool defaultExpanded below controls default state of accordion */}  
             <Accordion defaultExpanded={true} elevation={0}>
@@ -119,7 +123,7 @@ export function TodoCenter() : JSX.Element {
                     onFocus={(event) => event.stopPropagation()}
                     control={<Checkbox 
                       checked={task.done} 
-                      id={task.id} 
+                      id={task.id.toString()} 
                       onChange={toggleTask}/>}
                     label={
                       <div
@@ -136,7 +140,7 @@ export function TodoCenter() : JSX.Element {
               <AccordionDetails>
                 <Typography color="textSecondary" component={'span'}>
                   <Box pl={4}> 
-                    {task.subtasks.map((subtask: any) => ( 
+                    {task.subtasks.map((subtask: ISubtask) => ( 
                       <div className={classes.root} key={subtask.id}>
                           <Accordion defaultExpanded={false} elevation={0}>
                               <FormControlLabel
@@ -163,7 +167,7 @@ export function TodoCenter() : JSX.Element {
                       </div>
                     ))}
                     <div>
-                      <form method="post" id={task.id} onSubmit={handleSubtaskSubmit}>
+                      <form method="post" id={task.id.toString()} onSubmit={handleSubtaskSubmit}>
                         <input type="text" placeholder="+ Add Subtask" onChange={handleSubtaskChange} />
                       </form>
                     </div>
@@ -177,8 +181,6 @@ export function TodoCenter() : JSX.Element {
       <div>
         <form method="post" onSubmit={handleTaskSubmit}>
           <input type="text" placeholder="+ Add Task" onChange={handleTaskChange} />
-          {/* <OutlinedTextField /> */}
-          {/* <button type="submit">+ Add Task</button> */}
         </form>
       </div>
     </div>
