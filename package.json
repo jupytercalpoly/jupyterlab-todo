@@ -13,8 +13,8 @@
   },
   "license": "BSD-3-Clause",
   "author": {
-    "name": "Andrii Ieroshnko, Harshit Mittal",
-    "email": "ieroshenkoa@gmail.com"
+    "name": "Harshit Mittal, Andrii Ieroshenko",
+    "email": "harshitclg@gmail.com"
   },
   "files": [
     "lib/**/*.{d.ts,eot,gif,html,jpg,js,js.map,json,png,svg,woff2,ttf}",
