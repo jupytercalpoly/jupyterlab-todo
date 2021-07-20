@@ -13,7 +13,7 @@
   },
   "license": "BSD-3-Clause",
   "author": {
-    "name": "Harshit Mittal, Andrii Ieroshnko ",
+    "name": "Harshit Mittal, Andrii Ieroshenko",
     "email": "harshitclg@gmail.com"
   },
   "files": [
@@ -47,7 +47,10 @@
     "watch:labextension": "jupyter labextension watch ."
   },
   "dependencies": {
-    "@jupyterlab/application": "^3.0.0"
+    "@fontsource/roboto": "^4.5.0",
+    "@jupyterlab/application": "^3.0.0",
+    "@material-ui/core": "^4.12.1",
+    "@material-ui/icons": "^4.11.2"
   },
   "devDependencies": {
     "@jupyterlab/builder": "^3.0.0",
