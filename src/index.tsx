@@ -17,17 +17,17 @@ import { ICommandPalette, MainAreaWidget } from '@jupyterlab/apputils';
  * Initialization data for the jupyterlab-todo extension.
  */
  const plugin: JupyterFrontEndPlugin<void> = {
-  id: "jupyterlab-todo:plugin",
+  id: 'jupyterlab-todo:plugin',
   autoStart: true,
   requires: [ICommandPalette],
 
   activate: async (app: JupyterFrontEnd, palette: ICommandPalette) => {
     const content: Widget = new MyWidget();
     const widget = new MainAreaWidget({ content });
-    widget.id = "apod-jupyterlab";
+    widget.id = 'todo-jupyterlab';
     widget.title.closable = true;
     widget.title.icon = Icons.jupyterFaviconIcon;
-    app.shell.add(widget, "right", { rank: 500 });
+    app.shell.add(widget, 'right', { rank: 500 });
   }
 }
 
