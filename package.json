@@ -74,5 +74,8 @@
   "jupyterlab": {
     "extension": true,
     "outputDir": "jupyterlab_todo/labextension"
-  }
+  },
+  "resolutions": {
+    "@types/react": "^17.0.0"
+  }  
 }
