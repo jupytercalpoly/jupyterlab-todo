@@ -11,19 +11,29 @@ import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+// TODO: write type declarations for 'jstodotxt'
+// @ts-ignore
+import { TodoTxt } from 'jstodotxt';
+import { UUID } from '@lumino/coreutils';
 
 export interface ITask {
   task: string
-  id: number
+  id: string
   subtasks: ISubtask[],
   done: boolean
 }
 
 export interface ISubtask {
   subtask: string, 
-  id: number, 
-  parentId: number,
+  id: string, 
+  parentId: string,
   done: boolean
+}
+
+export interface ITodotxtTask {
+  text: string, 
+  complete: boolean, 
+  projects: string[]
 }
 
 const useStyles = makeStyles(() => ({
@@ -47,6 +57,47 @@ export function TodoCenter() : JSX.Element {
 
   const classes = useStyles();
 
+  let showFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    const reader = new FileReader();
+    reader.onload = async (e) => { 
+      const text = (e.target?.result);
+      let todoTxt: ITodotxtTask[] = TodoTxt.parse(text);
+      todoTxt = todoTxt.filter(txtTask => txtTask.text !== "" && txtTask.text !== undefined);
+      let curTasks: ITask[] = [];
+      todoTxt.forEach((txtTask) => {
+        let taskToFind = txtTask.projects[0];
+        let i = curTasks.findIndex(curTask => curTask.task === taskToFind);
+        console.log(i);
+        if (i !== -1) {
+          curTasks[i].subtasks.push({
+            subtask: txtTask.text, 
+            id: UUID.uuid4(), 
+            parentId: curTasks[i].id,
+            done: txtTask.complete
+          })
+        } else {
+          let t = UUID.uuid4();
+          curTasks.push({
+            task: txtTask.projects[0],
+            id: t,
+            subtasks: [{
+              subtask: txtTask.text, 
+              id: UUID.uuid4(), 
+              parentId: t,
+              done: txtTask.complete
+            }],
+            done: false
+          })
+        }
+      });
+      setTasks(curTasks);
+    };
+    if (e.target.files) {
+      reader.readAsText(e.target.files[0]);
+    }
+  }
+
   let handleTaskChange = (e: React.FormEvent<HTMLInputElement>) => {
     setTaskText(e.currentTarget.value);
   };
@@ -59,7 +110,7 @@ export function TodoCenter() : JSX.Element {
     e.preventDefault();
     setTasks([...tasks, {
       task: taskTextInput, 
-      id: Date.now(), 
+      id: UUID.uuid4(), 
       subtasks: [],
       done: false
     }]);
@@ -69,10 +120,10 @@ export function TodoCenter() : JSX.Element {
   let handleSubtaskSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     let curTasks = [...tasks];
-    let i = curTasks.findIndex(task => task.id === parseInt(e.currentTarget.id));
+    let i = curTasks.findIndex(task => task.id === e.currentTarget.id);
     curTasks[i].subtasks.push({
       subtask: subtaskTextInput, 
-      id: Date.now(), 
+      id: UUID.uuid4(), 
       parentId: curTasks[i].id,
       done: false
     })
@@ -82,7 +133,7 @@ export function TodoCenter() : JSX.Element {
 
   let toggleTask = (e: React.FormEvent<HTMLInputElement>) => {
     let curTasks = [...tasks];
-    let i = curTasks.findIndex(task => task.id === parseInt(e.currentTarget.id));
+    let i = curTasks.findIndex(task => task.id === e.currentTarget.id);
     curTasks[i].done = !curTasks[i].done;
     if (curTasks[i].done) {
       curTasks[i].subtasks.map(function(subtask) {
@@ -95,9 +146,9 @@ export function TodoCenter() : JSX.Element {
 
   let toggleSubtask = (e: React.FormEvent<HTMLInputElement>) => {
     let curTasks = [...tasks];
-    let i = curTasks.findIndex(task => task.id === parseInt(e.currentTarget.id.split('-')[0])); //parent id
+    let i = curTasks.findIndex(task => task.id === e.currentTarget.id.split('+')[0]); //parent id
     let curSubtasks = [...curTasks[i].subtasks];
-    let j = curSubtasks.findIndex(subtask => subtask.id === parseInt(e.currentTarget.id.split('-')[1])); //id
+    let j = curSubtasks.findIndex(subtask => subtask.id === e.currentTarget.id.split('+')[1]); //id
     curSubtasks[j].done = !curSubtasks[j].done;
     curTasks[i].subtasks = curSubtasks;
     setTasks(curTasks);
@@ -105,6 +156,9 @@ export function TodoCenter() : JSX.Element {
 
   return (
     <div>
+      <div>
+        <input type="file" onChange={showFile} />
+      </div>
       <div>
         {tasks.map((task: ITask) => ( 
           <div className={classes.root} key={task.id}>
@@ -149,7 +203,7 @@ export function TodoCenter() : JSX.Element {
                                 onFocus={(event) => event.stopPropagation()}
                                 control={<Checkbox 
                                   checked={subtask.done} 
-                                  id={'' + subtask.parentId + '-' + subtask.id} 
+                                  id={'' + subtask.parentId + '+' + subtask.id} 
                                   onChange={toggleSubtask} 
                                 />} 
                                 label={

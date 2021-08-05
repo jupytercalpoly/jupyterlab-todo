@@ -4694,6 +4694,11 @@ jss@10.7.1, jss@^10.5.1:
     is-in-browser "^1.1.3"
     tiny-warning "^1.0.2"
 
+jstodotxt@^0.10.0:
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/jstodotxt/-/jstodotxt-0.10.0.tgz#ca3a06ab082531ff955726fcd51f2295dc929a97"
+  integrity sha512-kZFRH+/6DUuK8coI8PbHLhuSAU/6xUuZLcJ41KJmRQ5z3ik+SCNIG2YrDZKlKeDS3eB2ymIrbIXYAvQwjXrWyg==
+
 "jsx-ast-utils@^2.4.1 || ^3.0.0":
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/jsx-ast-utils/-/jsx-ast-utils-3.2.0.tgz#41108d2cec408c3453c1bbe8a4aae9e1e2bd8f82"

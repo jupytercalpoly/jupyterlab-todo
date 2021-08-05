@@ -50,7 +50,8 @@
     "@fontsource/roboto": "^4.5.0",
     "@jupyterlab/application": "^3.0.0",
     "@material-ui/core": "^4.12.1",
-    "@material-ui/icons": "^4.11.2"
+    "@material-ui/icons": "^4.11.2",
+    "jstodotxt": "^0.10.0"
   },
   "devDependencies": {
     "@jupyterlab/builder": "^3.0.0",
@@ -77,5 +78,5 @@
   },
   "resolutions": {
     "@types/react": "^17.0.0"
-  }  
+  }
 }
