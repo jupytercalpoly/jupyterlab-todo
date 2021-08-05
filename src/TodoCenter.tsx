@@ -2,9 +2,9 @@
 // Distributed under the terms of the Modified BSD License.
 
 import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Accordion from '@material-ui/core/Accordion'
-import Checkbox from '@material-ui/core/Checkbox';
+import Checkbox, { CheckboxProps } from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Box from '@material-ui/core/Box';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
@@ -15,6 +15,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 // @ts-ignore
 import { TodoTxt } from 'jstodotxt';
 import { UUID } from '@lumino/coreutils';
+import { grey } from '@material-ui/core/colors';
 
 export interface ITask {
   task: string
@@ -48,12 +49,24 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+const GreyCheckbox = withStyles({
+  root: {
+    color: grey[400],
+    '&$checked': {
+      color: grey[600],
+    },
+  },
+  checked: {},
+})((props: CheckboxProps) => <Checkbox color="default" {...props} />);
+
 //TODO: decouple elements of the TODO center, consider using something else than Material UI accordion
 //TODO: consider not using Material UI
 export function TodoCenter() : JSX.Element {
   let [taskTextInput, setTaskText] = useState<string>("");
   let [subtaskTextInput, setSubtaskText] = useState<string>("");
   let [tasks, setTasks] = useState<ITask[]>([]);
+  // @ts-ignore
+  let [completedTasks, setCompletedTasks] = useState<ITask[]>([]);
 
   const classes = useStyles();
 
@@ -108,12 +121,14 @@ export function TodoCenter() : JSX.Element {
 
   let handleTaskSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setTasks([...tasks, {
-      task: taskTextInput, 
-      id: UUID.uuid4(), 
-      subtasks: [],
-      done: false
-    }]);
+    setTasks([
+      {
+        task: taskTextInput, 
+        id: UUID.uuid4(), 
+        subtasks: [],
+        done: false
+      }
+      ,...tasks]);
     e.currentTarget.reset();
   };
 
@@ -140,6 +155,7 @@ export function TodoCenter() : JSX.Element {
         subtask.done = true;
         return subtask;
       })
+      setCompletedTasks([curTasks.splice(i, 1)[0], ...completedTasks]);
     }
     setTasks(curTasks);
   }
@@ -155,10 +171,25 @@ export function TodoCenter() : JSX.Element {
   };
 
   return (
-    <div>
-      <div>
-        <input type="file" onChange={showFile} />
-      </div>
+    <Box 
+      width="100vh" 
+      height="100vh" 
+      bgcolor="white" 
+      border={0} 
+    >
+    <div> 
+      <Box pl={2} pt={2} border={0}> 
+        <div>
+          <input type="file" onChange={showFile} />
+        </div>
+      </Box>
+      <Box pl={2} pt={4}> 
+        <div>
+          <form method="post" onSubmit={handleTaskSubmit}>
+            <input type="text" placeholder="+ Add Task" onChange={handleTaskChange} />
+          </form>
+        </div>
+      </Box>
       <div>
         {tasks.map((task: ITask) => ( 
           <div className={classes.root} key={task.id}>
@@ -186,7 +217,7 @@ export function TodoCenter() : JSX.Element {
                           color: task.done ? "grey" : "black"
                         }}
                       >
-                        {task.task}
+                        {task.task}   [{task.subtasks.filter(s => s.done === false).length}]
                       </div>
                     }   
                   />
@@ -232,11 +263,107 @@ export function TodoCenter() : JSX.Element {
           </div>
         ))}
       </div>
-      <div>
-        <form method="post" onSubmit={handleTaskSubmit}>
-          <input type="text" placeholder="+ Add Task" onChange={handleTaskChange} />
-        </form>
-      </div>
+
+
+      {/* TODO: destructure and reuse elements */}
+      {completedTasks.length ? 
+        <Box 
+          display="flex"
+          position="absolute"
+          bottom="8px"
+          flexDirection="column"
+        >
+          <Accordion defaultExpanded={false} elevation={0}>
+            <AccordionSummary
+              classes={{ content: classes.content, expanded: classes.expanded }}
+              expandIcon={<ExpandMoreIcon />}
+              aria-label="Expand"
+              aria-controls="additional-actions1-content"
+              id="additional-actions1-header"
+            >
+            <div
+              style={{
+                color: "black",
+                fontWeight: "bold"
+              }}
+            >
+              <Typography variant="button" display="block"> 
+                Completed: [{completedTasks.length}] 
+              </Typography>
+            </div>  
+            </AccordionSummary>
+          <AccordionDetails>  
+            {completedTasks.map((task: ITask) => ( 
+              <div className={classes.root} key={task.id}>
+                {/* bool defaultExpanded below controls default state of accordion */}              
+                <Accordion defaultExpanded={false} elevation={0}>
+                    <AccordionSummary
+                      classes={{ content: classes.content, expanded: classes.expanded }}
+                      expandIcon={<ExpandMoreIcon />}
+                      aria-label="Expand"
+                      aria-controls="additional-actions1-content"
+                      id="additional-actions1-header"
+                    >
+                      <FormControlLabel
+                        aria-label="Acknowledge"
+                        onClick={(event) => event.stopPropagation()}
+                        onFocus={(event) => event.stopPropagation()}
+                        control={<GreyCheckbox 
+                          checked={task.done} 
+                          id={task.id.toString()} 
+                          onChange={toggleTask}/>}
+                        label={
+                          <div
+                            style={{
+                              textDecoration: task.done ? "line-through" : "none",
+                              color: task.done ? "grey" : "black"
+                            }}
+                          >
+                            {task.task}
+                          </div>
+                        }   
+                      />
+                    </AccordionSummary>
+                  <AccordionDetails>
+                    <Typography color="textSecondary" component={'span'}>
+                      <Box pl={4}> 
+                        {task.subtasks.map((subtask: ISubtask) => ( 
+                          <div className={classes.root} key={subtask.id}>
+                              <Accordion defaultExpanded={false} elevation={0}>
+                                  <FormControlLabel
+                                    aria-label="Acknowledge"
+                                    onClick={(event) => event.stopPropagation()}
+                                    onFocus={(event) => event.stopPropagation()}
+                                    control={<GreyCheckbox 
+                                      checked={subtask.done} 
+                                      id={'' + subtask.parentId + '+' + subtask.id} 
+                                      onChange={toggleSubtask} 
+                                    />} 
+                                    label={
+                                      <div
+                                        style={{
+                                          textDecoration: subtask.done ? "line-through" : "none",
+                                          color: subtask.done ? "grey" : "black"
+                                        }}
+                                      >
+                                        {subtask.subtask}
+                                      </div>                
+                                    }
+                                  />
+                              </Accordion>
+                          </div>
+                        ))}
+                      </Box>
+                    </Typography>
+                  </AccordionDetails>
+                </Accordion>
+              </div>
+            ))}
+            </AccordionDetails>
+          </Accordion>
+        </Box>
+      : null}
     </div>
+    </Box>
   );
 }
