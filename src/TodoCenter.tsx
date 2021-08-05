@@ -149,15 +149,23 @@ export function TodoCenter() : JSX.Element {
   let toggleTask = (e: React.FormEvent<HTMLInputElement>) => {
     let curTasks = [...tasks];
     let i = curTasks.findIndex(task => task.id === e.currentTarget.id);
-    curTasks[i].done = !curTasks[i].done;
-    if (curTasks[i].done) {
-      curTasks[i].subtasks.map(function(subtask) {
-        subtask.done = true;
-        return subtask;
-      })
-      setCompletedTasks([curTasks.splice(i, 1)[0], ...completedTasks]);
+    if (i !== -1) {
+      curTasks[i].done = !curTasks[i].done;
+      if (curTasks[i].done) {
+        curTasks[i].subtasks.map(function(subtask) {
+          subtask.done = true;
+          return subtask;
+        })
+        setCompletedTasks([curTasks.splice(i, 1)[0], ...completedTasks]);
+      }
+      setTasks(curTasks);
+    } else {
+      let curCompleted = [...completedTasks];
+      i = curCompleted.findIndex(task => task.id === e.currentTarget.id);
+      curCompleted[i].done = !curCompleted[i].done;
+      setTasks([...tasks, completedTasks.splice(i, 1)[0]]);
+      setCompletedTasks(completedTasks);
     }
-    setTasks(curTasks);
   }
 
   let toggleSubtask = (e: React.FormEvent<HTMLInputElement>) => {
@@ -268,10 +276,8 @@ export function TodoCenter() : JSX.Element {
       {/* TODO: destructure and reuse elements */}
       {completedTasks.length ? 
         <Box 
-          display="flex"
           position="absolute"
           bottom="8px"
-          flexDirection="column"
         >
           <Accordion defaultExpanded={false} elevation={0}>
             <AccordionSummary
