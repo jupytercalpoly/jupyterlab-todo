@@ -1,0 +1,4 @@
+(A) 2021-08-04 buy tomatoes +ShoppingList
+(A) 2021-08-04 buy sugar +ShoppingList
+(A) 2021-08-04 buy milk +ShoppingList
+(A) 2021-08-04 go to the gym +Personal +Health
