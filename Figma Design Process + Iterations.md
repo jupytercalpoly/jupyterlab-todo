@@ -1,3 +1,12 @@
+# **User Research**
+Interviews conducted with members from the Jupyter community inquiring about their thoughts and feeling of our extension and what they would expect from it if they were to use it in the future. Through such responses created basic user personas to keep in mind the needs of our users and an empathy map to understand their though processes. 
+
+![Empathy Map](https://user-images.githubusercontent.com/83098854/138760901-788d6001-a1e8-4c98-80ef-2f89bf40e319.png)
+![HMW](https://user-images.githubusercontent.com/83098854/138760924-6310f3a6-b2ff-41d3-b1e4-15020d892b5c.png)
+![Tanya-Persona](https://user-images.githubusercontent.com/83098854/138761078-45ee9093-303f-45d0-9b74-24627a698265.png)
+![Thomas-Persona](https://user-images.githubusercontent.com/83098854/138760972-31e727e9-93e1-4034-a22f-58e71d6de025.png)
+![Eddie-Persona](https://user-images.githubusercontent.com/83098854/138760998-180c3c6f-7963-49a4-9bdf-605fd6fa9e07.png)
+
 # **Early Sketches**
 Quick sketches done on Procreate after conducting several user interviews with Jupyter users to understand what they pictured for the ToDo extension. All of the sketches implement a task nesting model. 
 
